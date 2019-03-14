@@ -167,11 +167,19 @@ string QInt_To_Arr(const QInt& number)
 //Ham chuyen tu mang a sang Qint
 QInt Arr_To_QInt(const string& binArr)
 {
+	
+	string _128bit = binArr;
+	int n = binArr.length();
+	if (n < 128)
+	{
+		_128bit.insert(0, 128 - n, '0');
+	}
+
 	QInt number;
 	initQInt(number);
-	for (int i = 0; i < binArr.length(); i++)
+	for (int i = 0; i < 128; i++)
 	{
-		if (binArr[i] == '1')
+		if (_128bit[i] == '1')
 		{
 			number.data[i / 32] = number.data[i / 32] | (1 << (32 - 1 - i % 32));
 		}
@@ -199,13 +207,17 @@ string DecToBin(string userInputStr)
 {
 	string binary;
 
+	int SoBitMinDeBieuDien = MAXBIT(userInputStr); // kiem tra xem userInputStr dung may bit la co the bieu dien dc r
+
+	//Kiem tra xem userInputStr co phai la so am ko
 	bool IsSigned = false;
 	if (userInputStr[0] == '-')
 	{
 		IsSigned = true;
-		userInputStr.erase(0, 1);
+		userInputStr.erase(0, 1);//Neu la so am thi xoa dau -
 	}
 
+	// chia userInputStr cho 2 r lay so du bo vao binary
 	for (unsigned short int i = 0; userInputStr.length() != 0; i++)
 	{
 		if ((userInputStr[userInputStr.length() - 1] - 48) % 2 != 0) {
@@ -215,14 +227,26 @@ string DecToBin(string userInputStr)
 		else binary.push_back('0');
 		userInputStr = chia2(userInputStr);
 	}
-	string res = reverse(binary);
 
-	if (IsSigned)
+	int bitCanThem = SoBitMinDeBieuDien - binary.length();
+	if (bitCanThem > 0) // Vd: neu userInputStr = -2, luc nay chuoi binary = "01", de bieu dien // so 2 thi so bit can nho nhat la 8 bit, can lap them 6 so 0 cho du 8 bit
 	{
-		res = bu2(res);
-	}
-	return res;
+		while (bitCanThem > 0)
+		{
+			binary.push_back('0');
+			bitCanThem--;
+		}
 
+		//Dao chuoi lai
+		string res = reverse(binary);
+
+		if (IsSigned) //Neu la so am, thi bieu dien so bu 2
+		{
+			res = bu2(res);
+		}
+		return res;
+
+	}
 }
 
 
@@ -230,7 +254,7 @@ string DecToBin(string userInputStr)
 void ScanQInt(QInt &number, string userInputStr)
 {
 	initQInt(number);
-
+	int bit = MAXBIT(userInputStr);
 	string binArr = DecToBin(userInputStr);
 
 	number = Arr_To_QInt(binArr);
@@ -260,8 +284,8 @@ string operator * (string bigNumber, int x)
 			res.insert(0, 1, numToString(tmp % 10));//lay phan don vi cho vao string
 			tmp = tmp / 10;// lay phan chuc de tinh tiep
 		}
-
 	}
+
 	if (tmp > 0)  // Neu khac 0 thi bo them vao chuoi res
 	{
 		res.insert(0, 1, numToString(tmp));
@@ -271,11 +295,22 @@ string operator * (string bigNumber, int x)
 
 string _x_mu_n(int coSo, int soMu)
 {
+	bool soAm = false;
+	if (coSo < 0)
+	{
+		soAm = (soMu % 2 == 0) ? false : true;
+		coSo *= -1;
+	}
+
+
 	string res = "1";
 	for (int i = 1; i <= soMu; i++)
 	{
 		res = res * coSo;
 	}
+	if (soAm)
+		res.insert(0, 1, '-');
+	
 	return res;
 
 }
@@ -315,6 +350,11 @@ string operator + (string& a, string& b)
 	}
 	return res;
 }
+
+
+
+
+
 //================== OPERATOR - CHO 2 CHUOI SO NGUYEN LON ===================
 string phepTru2Chuoi(string& soTru, string& soBiTru)
 {
@@ -356,9 +396,7 @@ string operator - (string& a, string& b)
 		res = phepTru2Chuoi(b, a);
 		res.insert(0, 1, '-');
 	}
-	
-	
-	return res;
+		return res;
 }
 //========================================================================================
 
@@ -368,24 +406,30 @@ string operator - (string& a, string& b)
 string BinToDec(string bit)
 {
 	string decNum, tmp;
+	
 	for (int i = 0; i < bit.length(); i++)
 	{
-		if (bit[i] == '1')
-		{
-			tmp = _x_mu_n(2,bit.length() - 1 - i); //2^i, voi i thuoc [bit.length(),0]
-			decNum = decNum + tmp;// Cong don tat ca cac 2^i
-		}
+		
+		tmp = _x_mu_n(-2, MAX - i - 1);
+		tmp = tmp * stringToNum(bit[i]);
+		decNum = decNum + tmp;
 	}
 	return decNum;
 }
 
 int main()
 {
-	string a = "00001111";
-	string b = "60";
-	QInt aa;
-	string bin = BinToDec(a);
-	cout << bin;
+	//string a = "254";
+	//string b = "60";
+	//QInt aa;
+	//string c = DecToBin(a);//254 bi loi, nhung so thuoc ria ngoia
+
+	string z = "11111110";
+	string y = BinToDec(z);
+	string v = _x_mu_n(-2, 3);
+	cout << v;
+
+	
 
 	system("pause");
 	return 0;
