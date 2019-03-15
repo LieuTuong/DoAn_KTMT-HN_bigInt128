@@ -1,9 +1,9 @@
 ﻿  bigInt.cpp
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(60): warning C4018: '<': signed/unsigned mismatch
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(101): warning C4018: '<': signed/unsigned mismatch
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(151): warning C4018: '<': signed/unsigned mismatch
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(153): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(196): warning C4018: '<': signed/unsigned mismatch
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(410): warning C4018: '<': signed/unsigned mismatch
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(250): warning C4715: 'DecToBin': not all control paths return a value
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(86): warning C4018: '<': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(127): warning C4018: '<': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(177): warning C4018: '<': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(179): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(222): warning C4018: '<': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(460): warning C4018: '<': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(276): warning C4715: 'DecToBin': not all control paths return a value
   BigInt128 lan 2.vcxproj -> E:\lap trinh\BigInt128 lan 2\Debug\BigInt128 lan 2.exe

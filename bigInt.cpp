@@ -3,6 +3,7 @@
 #include<bitset>
 #include<array>
 #include<memory>
+
 using namespace std;
 #define MAX 128
 
@@ -53,6 +54,31 @@ char numToString(int n)     // chuyen so sang char
 {
 	return (char)(n + 48);
 }
+
+//Kiem tra dau cua num
+ bool IsSign(string num)
+{
+	 return (num[0] == '-') ? true : false;
+}
+
+ //Cai dat dau cho num
+ void setSign(string& num,bool s)
+ {
+	 if (s == true && !IsSign(num))
+		 num.insert(0, 1, '-');
+	 else if (s == false && IsSign(num))
+		 num.erase(0, 1);
+ }
+
+
+ // Ham lay tri tuyet doi cua num
+ string absolute(string num)
+ {
+	 string res = num;
+	 if (IsSign(num))//Neu la so am thi bo dau -
+		 res.erase(0, 1);
+	 return res;
+ }
 
 string remove0(const string& number)
 {
@@ -330,10 +356,43 @@ void canBang2Chuoi(string& a, string& b)
 }
 
 
-//Ham cong 2 chuoi bigInt
-string operator + (string& a, string& b)
+string subtract(string soTru, string soBiTru)
+{
+	string res;
+	soTru=absolute(soTru);
+	soBiTru = absolute(soBiTru);
+	canBang2Chuoi(soTru, soBiTru);
+	int len = soTru.length();
+	int hieu, tmp;
+	for (int i = len - 1; i >= 0; --i)
+	{
+
+		if (soTru[i] < soBiTru[i]) //Neu tai vi tri dg xet, (soBiTru < soTru ) lay (soBiTru + 10 ) - soBiTru - soDu
+		{
+			hieu=stringToNum(soTru[i]) + 10 -stringToNum(soBiTru[i]);
+			tmp = stringToNum(soTru[i - 1]) - 1;
+			soTru[i - 1] = numToString(tmp);
+		}
+		else
+		{
+			hieu = stringToNum(soTru[i])  - stringToNum(soBiTru[i]);
+		}
+		res.insert(0, 1, numToString(hieu));// bo ket qua tinh dc theo hang vao chuoi res
+	}
+	
+	return res;
+}
+
+
+
+string add(string a, string b)
 {
 	string res = "";
+	//Lay tri tuyet doi 2 so
+	a = absolute(a);
+	b = absolute(b);
+
+	//
 	canBang2Chuoi(a, b);
 	int len = a.length();
 
@@ -352,53 +411,43 @@ string operator + (string& a, string& b)
 }
 
 
-
-
-
-//================== OPERATOR - CHO 2 CHUOI SO NGUYEN LON ===================
-string phepTru2Chuoi(string& soTru, string& soBiTru)
+//Ham cong 2 chuoi bigInt
+string operator + (string a, string b)
 {
-	string res; 
-	canBang2Chuoi(soTru, soBiTru);
-	int len = soTru.length();
-	int tmp = 0;// soNho
-	int hieu;
-	for (int i = len - 1; i >= 0; --i)
+	string res;
+	if (IsSign(a) == IsSign(b))//Neu 2 so cung dau
 	{
-
-		if (soTru[i] < soBiTru[i]) //Neu tai vi tri dg xet, (soBiTru < soTru ) lay (soBiTru + 10 ) - soBiTru
-		{
-			hieu = (stringToNum(soTru[i]) + 10) - stringToNum(soBiTru[i]) - tmp;
-			tmp = 1;
-		}
-		else// neu soBiTru lon hon thi lay (SoBiTru - soTru)
-		{
-			hieu = stringToNum(soTru[i]) - stringToNum(soBiTru[i]) - tmp;
-		}
-		res.insert(0, 1, numToString(hieu));// bo ket qua tinh dc theo hang vao chuoi res
+		res = add(a, b);
+		setSign(res, IsSign(a));// Xet dau cho res theo dau cua a
 	}
+	else//Neu 2 so khac dau
+	{
+		if (absolute(a) > absolute(b))//Neu |a| > |b|
+		{
+			res = subtract(a,b);
+			setSign(res, IsSign(a));//Xet dau cua res theo dau cua so lon hon			
+		}
+		else
+		{
+			res = subtract(b,a);
+			setSign(res, IsSign(b));
+		}
+	}
+
+	if (res == "0")// Tranh truong hop (-0), neu = 0 thi bo dau -
+		setSign(res, false);
 	return res;
 }
 
-//Ham tru 2 chuoi BigInt
-string operator - (string& a, string& b)
-{
-	string res = "";
-	canBang2Chuoi(a, b);
 
-	int soTruCoLonHonSoBiTru = a.compare(b);//kiem tra xem so a co nho hon so b ko de ra ket qua am
-	if (soTruCoLonHonSoBiTru >= 0)// Neu a >= b
-	{
-		res = phepTru2Chuoi(a, b);
-	}
-	else //Neu a<b
-	{
-		res = phepTru2Chuoi(b, a);
-		res.insert(0, 1, '-');
-	}
-		return res;
+
+//Ham tru 2 chuoi BigInt
+string operator - (string a, string b)
+{
+	setSign(b, !IsSign(b)); // a - b = a + (-y)
+	return a + b;
 }
-//========================================================================================
+
 
 
 
@@ -407,6 +456,7 @@ string BinToDec(string bit)
 {
 	string decNum, tmp;
 	
+	if (bit[0]=='1')//Neu so la so am, thi chuyen qua so bu 2 r tinh tong bint thuong
 	for (int i = 0; i < bit.length(); i++)
 	{
 		
@@ -424,12 +474,15 @@ int main()
 	//QInt aa;
 	//string c = DecToBin(a);//254 bi loi, nhung so thuoc ria ngoia
 
-	string z = "11111110";
-	string y = BinToDec(z);
-	string v = _x_mu_n(-2, 3);
-	cout << v;
-
-	
+	/*string a = "12";
+	string b = "-10";
+	string c = b+a;
+	cout << c;
+*/
+	string a = "-70";
+	string b = "10";
+	string x = a + b;
+	cout << x;
 
 	system("pause");
 	return 0;
