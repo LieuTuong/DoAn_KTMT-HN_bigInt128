@@ -116,6 +116,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bigInt.cpp" />
+    <ClCompile Include="xuLiStringBigNumber.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="xuLiStringBigNumber.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
