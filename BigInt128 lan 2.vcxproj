@@ -115,7 +115,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bigInt.cpp" />
+    <ClCompile Include="QInt.cpp" />
     <ClCompile Include="xuLiStringBigNumber.cpp" />
   </ItemGroup>
   <ItemGroup>

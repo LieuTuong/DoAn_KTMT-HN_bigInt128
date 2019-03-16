@@ -1,5 +1,5 @@
-﻿  bigInt.cpp
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(97): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(185): warning C4018: '<': signed/unsigned mismatch
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\bigint.cpp(239): warning C4018: '<': signed/unsigned mismatch
+﻿  QInt.cpp
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(93): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(175): warning C4018: '<': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(229): warning C4018: '<': signed/unsigned mismatch
   BigInt128 lan 2.vcxproj -> E:\lap trinh\BigInt128 lan 2\Debug\BigInt128 lan 2.exe
