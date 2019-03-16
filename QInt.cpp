@@ -8,24 +8,7 @@ using namespace std;
 typedef struct
 {
 	uint32_t data[4];
-
 }QInt;
-
-//int MAXBIT(string userInputStr)
-//{
-//	if (userInputStr[0] == '-')
-//	{
-//		userInputStr.erase(0, 1);
-//	}
-//	int len = userInputStr.length();
-//	if (len <= 3)return 8;
-//	else if (len > 3 && len <= 5) return 16;
-//	else if (len > 5 && len <= 10) return 32;
-//	else if (len > 10 && len <= 19) return 64;
-//	else if (len > 19 && len <= 39)return 128;
-//	else return 0;
-//}
-
 
 
 //ham khoi tao tat ca cac gia tri trong struct data = 0, nghia la cho tat ca cac bit trong mang la 0
@@ -283,6 +266,8 @@ void PrintQInt(QInt number)
 	cout << decNum;
 }
 
+
+//=============================  CAC TOAN TU <, >, >=, <= , ==
 bool IsNegative(string num)
 {
 	return (num[0] == '1') ? true : false;
@@ -362,17 +347,152 @@ bool operator >= (const QInt& N1, const QInt& N2)
 	return IsGreater(N1, N2) || IsEqual(N1, N2);
 }
 
+bool operator == (const QInt& N1, const QInt& N2)
+{
+	return IsEqual(N1, N2);
+}
+//==================================================================================
+
+
+
+// ===================TOAN TU &, |, ^, ~ , << , >>
+QInt operator & (const QInt& a, const QInt& b)
+{
+	QInt res;
+	for (int i = 0; i < 4; i++)
+	{
+		res.data[i] = a.data[i] & b.data[i];
+	}
+	return res;
+}
+
+
+
+
+QInt operator | (const QInt& a, const QInt& b)
+{
+	QInt res;
+	for (int i = 0; i < 4; i++)
+	{
+		res.data[i] = a.data[i] | b.data[i];
+	}
+	return res;
+}
+
+
+
+QInt operator ^ (const QInt& a, const QInt& b)
+{
+	QInt res;
+	for (int i = 0; i < 4; i++)
+	{
+		res.data[i] = a.data[i] ^ b.data[i];
+	}
+	return res;
+}
+
+
+
+QInt operator ~ (const QInt& a)
+{
+	QInt res;
+	for (int i = 0; i < 4; i++)
+	{
+		res.data[i] = ~a.data[i];
+	}
+	return res;
+}
+
+
+
+// Neu so luong bit dixh < 0 thi xu li nhu the nao, cho i kien???????
+QInt operator >> (const QInt& a, unsigned int bit)
+{
+	string res(MAX,'0');
+	string A = QInt_To_Arr(a);
+
+
+	if (bit >= MAX) //neu dich so luong bit nhieu hon 128, thi toan bi mang se = 0
+	{
+		A = { 0 };
+	}
+	else
+	{
+		char tmp = (IsNegative(A)) ? '1' : '0';
+		for (int i = MAX - 1; i >= 119; i--)
+		{
+			res[i] = (i - bit) < 0 ? tmp : A[i - bit];
+		}
+	}
+	return  Arr_To_QInt(res);
+}
+
+
+
+// thieu truong hop bit < 0
+QInt operator << (const QInt& a, int bit)
+{
+	string res(MAX,'0');
+	string A = QInt_To_Arr(a);
+
+	if (bit >= MAX) //neu dich so luong bit nhieu hon 128, thi toan bi mang se = 0
+	{
+		A = { 0 };
+	}
+	else
+	{
+		for (int i = 0; i < MAX; i++)
+		{
+			res[i] = (i + bit) > (MAX - 1) ? 0 : A[i + bit];
+		}
+	}
+	return  Arr_To_QInt(res);
+}
+
+
+
+QInt rol(const QInt& a)
+{
+	string A = QInt_To_Arr(a);
+
+	int MSB = A[0];// giu bit trai nhat 
+	for (int i = 0; i < MAX - 1; i++)
+	{
+		A[i] = A[i + 1];
+	}
+	A[MAX - 1] = MSB;// bit trai nhat thanh bit phai nhat	
+	return  Arr_To_QInt(A);
+}
+
+
+
+QInt ror(const QInt& a)
+{
+	string A = QInt_To_Arr(a);
+
+	int LSB = A[MAX - 1];
+	for (int i = MAX - 1; i > 0; i--)
+	{
+		A[i] = A[i - 1];
+	}
+	A[0] = LSB;	
+	return Arr_To_QInt(A);
+}
+
+//===================================================================================================
+
+
+
 int main()
 {
-	string x = "-15";
-	string y = "-3";
+	string x = "2";
+	string y = "15";
 	QInt a, b;
 	ScanQInt(a, x);
 	ScanQInt(b, y);
 
-	if (a <= b)
-		cout << "\nDung";
-	else cout << "\nSai";
+	QInt c = rol(b);
+	PrintQInt(c);
 
 	system("pause");
 	return 0;
