@@ -14,8 +14,9 @@ string remove0(const string& number);
 string chia2(string bigInt);
 string reverse(string a);
 bool equals(string n1, string n2);
-bool less(string n1, string n2);
-bool greater(string a, string b);
+
+bool Less(string n1, string n2);
+bool Greater(string a, string b);
 string add(string number1, string number2);
 string subtract(string number1, string number2);
 void canBang2Chuoi(string& a, string& b);

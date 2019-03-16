@@ -1,5 +1,6 @@
 #include"xuLiStringBigNumber.h"
 #include<bitset>
+
 using namespace std;
 #define MAX 128
 
@@ -10,20 +11,20 @@ typedef struct
 
 }QInt;
 
-int MAXBIT(string userInputStr)
-{
-	if (userInputStr[0] == '-')
-	{
-		userInputStr.erase(0, 1);
-	}
-	int len = userInputStr.length();
-	if (len <= 3)return 8;
-	else if (len > 3 && len <= 5) return 16;
-	else if (len > 5 && len <= 10) return 32;
-	else if (len > 10 && len <= 19) return 64;
-	else if (len > 19 && len <= 39)return 128;
-	else return 0;
-}
+//int MAXBIT(string userInputStr)
+//{
+//	if (userInputStr[0] == '-')
+//	{
+//		userInputStr.erase(0, 1);
+//	}
+//	int len = userInputStr.length();
+//	if (len <= 3)return 8;
+//	else if (len > 3 && len <= 5) return 16;
+//	else if (len > 5 && len <= 10) return 32;
+//	else if (len > 10 && len <= 19) return 64;
+//	else if (len > 19 && len <= 39)return 128;
+//	else return 0;
+//}
 
 
 
@@ -40,8 +41,8 @@ void initQInt(QInt& x)
 // Ham lay bu 1
 string bu1(string a)
 {
-	string tmp="";
-	for (int i = 0; i < a.length(); i++)
+	string tmp;
+	for (int i = 0; i < MAX; i++)
 	{
 		char x= (a[i] == '1') ? '0' : '1';
 		tmp.push_back(x);		
@@ -57,7 +58,7 @@ string bu2(string a)
 	string dayBu1 = bu1(a);
 	int soDu = 1;
 	string bu2;
-	for (int i = a.length() - 1; i >= 0; i--)
+	for (int i = MAX - 1; i >= 0; i--)
 	{
 		char x;
 		if (dayBu1[i] == '0' && soDu == 1)
@@ -91,7 +92,7 @@ string bu2(string a)
 string QInt_To_Arr(const QInt& number)
 {
 	string a ;
-	for (int i = 0; i < a.length(); i++)
+	for (int i = 0; i < MAX; i++)
 	{
 		if ((number.data[i / 32] >> (32 - 1 - i % 32)) & 1 == 1)
 		{
@@ -120,7 +121,7 @@ QInt Arr_To_QInt(const string& binArr)
 
 	QInt number;
 	initQInt(number);
-	for (int i = 0; i < 128; i++)
+	for (int i = 0; i < MAX; i++)
 	{
 		if (_128bit[i] == '1')
 		{
@@ -136,72 +137,46 @@ QInt Arr_To_QInt(const string& binArr)
 
 
 
-//ham chuyen tu thap phan sang nhi phan
+//he 10 -> he 2
 string DecToBin(string userInputStr)
 {
-	string binary;
-
-	int SoBitMinDeBieuDien = MAXBIT(userInputStr); // kiem tra xem userInputStr dung may bit la co the bieu dien dc r
-
+	string binary(MAX,'0');
+	
 	//Kiem tra xem userInputStr co phai la so am ko
-	bool IsSigned = false;
-	if (userInputStr[0] == '-')
-	{
-		IsSigned = true;
-		userInputStr.erase(0, 1);//Neu la so am thi xoa dau -
+	bool IsSigned = IsSign(userInputStr);
+	if (IsSigned)
+	{		
+		userInputStr = absolute(userInputStr); //Lay tri tuyet doi cua chuoi
 	}
+	
 
 	// chia userInputStr cho 2 r lay so du bo vao binary
-	for (unsigned short int i = 0; userInputStr.length() != 0; i++)
+	for ( int i = 0; userInputStr.length() != 0; i++)
 	{
 		if ((userInputStr[userInputStr.length() - 1] - 48) % 2 != 0) {
-			binary.push_back('1');
+			binary[i]='1';
 			userInputStr[userInputStr.length() - 1] -= 1;
 		}
-		else binary.push_back('0');
+		else binary[i]='0';
 		userInputStr = chia2(userInputStr);
 	}
 
-	int bitCanThem = SoBitMinDeBieuDien - binary.length();
-	if (bitCanThem > 0) // Vd: neu userInputStr = -2, luc nay chuoi binary = "01", de bieu dien // so 2 thi so bit can nho nhat la 8 bit, can lap them 6 so 0 cho du 8 bit
-	{
-		while (bitCanThem > 0)
-		{
-			binary.push_back('0');
-			bitCanThem--;
-		}
-
+	
+	
 		//Dao chuoi lai
-		string res = reverse(binary);
+		binary = reverse(binary);
 
 		if (IsSigned) //Neu la so am, thi bieu dien so bu 2
 		{
-			res = bu2(res);
+			binary = bu2(binary);
 		}
-		return res;
+	
+		return binary;
 
 	}
-}
 
 
-//Ham nhap so QInt, con thieu cai doc File, ko biet cho 2 tham so co dc ko
-void ScanQInt(QInt &number, string userInputStr)
-{
-	initQInt(number);
-	int bit = MAXBIT(userInputStr);
-	string binArr = DecToBin(userInputStr);
-
-	number = Arr_To_QInt(binArr);
-
-	cout << endl;
-	for (int i = 0; i < 4; i++)
-	{
-		cout << bitset<32>(number.data[i]);
-	}
-}
-
-
-// Ham chuyen tu nhi phan sang thap phan
+// he 2 -> he 10
 string BinToDec(string bit)
 {
 	string decNum, tmp;
@@ -216,13 +191,95 @@ string BinToDec(string bit)
 			{
 				tmp = tmp * -1;
 			}
-		}				
+		}
+		else
+			tmp = "0";
 		decNum = decNum + tmp;
 	}
 	return decNum;
 }
 
 
+char nibbles(string binVal)
+{
+	char c ;
+
+	if      (binVal == "0000") c = '0';
+	else if (binVal == "0001") c = '1';
+	else if (binVal == "0010") c = '2';
+	else if (binVal == "0011") c = '3';
+	else if (binVal == "0100") c = '4';
+	else if (binVal == "0101") c = '5';
+	else if (binVal == "0110") c = '6';
+	else if (binVal == "0111") c = '7';
+	else if (binVal == "1000") c = '8';
+	else if (binVal == "1001") c = '9';
+	else if (binVal == "1010") c = 'A';
+	else if (binVal == "1011") c = 'B';
+	else if (binVal == "1100") c = 'C';
+	else if (binVal == "1101") c = 'D';
+	else if (binVal == "1110") c = 'E';
+	else if (binVal == "1111") c = 'F';
+	
+	return c;
+}
+
+// he 2 -> he 16
+string BinToHex(string bin)
+{
+	string res="0x";
+	int Blen = bin.length();
+	if (Blen % 4 == 1) //neu Blen ko chia het cho 4, thi them n so 0 sao cho (n + Blen) chia het cho 4
+	{
+		int newLen = 4 *  ((Blen / 4) + 1);
+		bin.insert(0, newLen - Blen, '0');
+	}
+
+	//Tach chuoi thanh tung bo 4, r doi nhung bo 4 do sang Hex tuong ung
+	for (int i=0;i<bin.length();i+=4)
+	{
+		string bo4Bit;
+		int k = i;
+		int j = 1;
+		while (j <= 4)
+		{
+			bo4Bit.push_back(bin[k]);
+			k++;
+			j++;
+		}
+		res.push_back(nibbles(bo4Bit));
+	}
+	
+	return res;
+}
+
+
+
+// he 10 -> he 16
+string DecToHex(string dec)
+{
+	string res;
+	res = DecToBin(dec);
+	res = BinToHex(res);
+	
+	return res;
+}
+
+//Ham nhap so QInt, con thieu cai doc File, ko biet cho 2 tham so co dc ko
+void ScanQInt(QInt &number, string userInputStr)
+{
+	initQInt(number);
+
+	string binArr = DecToBin(userInputStr);
+
+	number = Arr_To_QInt(binArr);
+
+	cout << endl;
+	for (int i = 0; i < 4; i++)
+	{
+		cout << bitset<32>(number.data[i]);
+	}
+}
 
 //ham xuat so QInt, xuat ra so he thap phan
 void PrintQInt(QInt number)
@@ -232,22 +289,16 @@ void PrintQInt(QInt number)
 
 	//Tu mang nhi phan a chuyen sang so thap phan	
 	string decNum = BinToDec(bin);
-
-
+	
 	cout << "\nSo chuyen sang he thap phan: ";
 	cout << decNum;
 }
 
 int main()
 {
-	QInt a, b, c;
-
-	/*string x= "15";
-	ScanQInt(a, x);
-*/
-	string v = "11111110";
-	string m = BinToDec(v);//loi 
-	cout << m;
+	string dec = "4825";
+	string y=DecToHex(dec);
+	cout << y;
 	system("pause");
 	return 0;
 }

@@ -177,15 +177,19 @@ void canBang2Chuoi(string& a, string& b)
 string subtract(string soTru, string soBiTru)
 {
 	string res;
+
+	//Lay tri tuyet doi 2 so
 	soTru = absolute(soTru);
 	soBiTru = absolute(soBiTru);
+	//
 	canBang2Chuoi(soTru, soBiTru);
+
 	int len = soTru.length();
 	int hieu, tmp;
 	for (int i = len - 1; i >= 0; --i)
 	{
 
-		if (soTru[i] < soBiTru[i]) //Neu tai vi tri dg xet, (soBiTru < soTru ) lay (soBiTru + 10 ) - soBiTru - soDu
+		if (soTru[i] < soBiTru[i]) //Neu tai vi tri dg xet, (soBiTru < soTru ), phan tu tiep theo -1 do muon 1
 		{
 			hieu = stringToNum(soTru[i]) + 10 - stringToNum(soBiTru[i]);
 			tmp = stringToNum(soTru[i - 1]) - 1;
@@ -197,7 +201,8 @@ string subtract(string soTru, string soBiTru)
 		}
 		res.insert(0, 1, numToString(hieu));// bo ket qua tinh dc theo hang vao chuoi res
 	}
-
+	while (res[0] == '0' && res.length() != 1)// bo so 0 du
+		res.erase(0, 1);
 	return res;
 }
 
@@ -240,7 +245,7 @@ string operator + (string a, string b)
 	}
 	else//Neu 2 so khac dau
 	{
-		if (absolute(a).compare(absolute(b)) == 1)//Neu |a| > |b|
+		if ( Greater(absolute(a) , absolute(b)) )//Neu |a| > |b|
 		{
 			res = subtract(a, b);
 			setSign(res, IsSign(a));//Xet dau cua res theo dau cua so lon hon			
@@ -272,52 +277,41 @@ bool equals(string a, string b)
 	return (a == b && IsSign(a) == IsSign(b));
 }
 
-bool less(string n1, string n2)
+
+
+bool Less(string n1, string n2)
 {
-	//int len1 = n1.length();
-	//int len2 = n2.length();
+	int len1 = n1.length();
+	int len2 = n2.length();
 
-	//bool s1 = IsSign(n1);
-	//bool s2 = IsSign(n2);
+	bool s1 = IsSign(n1);
+	bool s2 = IsSign(n2);
 
-	//if (s1 && !s2)// n1 so am, n2 so duong
-	//	return true;
-	//else if (!s1 && s2)//n1 duong, n2 am
-	//	return false;
+	if (s1 && !s2)// n1 so am, n2 so duong
+		return true;
+	else if (!s1 && s2)//n1 duong, n2 am
+		return false;
 
-	//else if (!s1) // deu duong
-	//{
+	else if (!s1) // deu duong
+	{
 
-	//	if (len1 < len2) return true;
-	//	if (len1 > len2) return false;
-	//	return n1 < n2;
-	//}
-	//else// deu am
-	//{
-	//	if (len1 > len2)return true;
-	//	if (len1 < len2)return false;
-	//	return n1.compare(n2) > 0;
-	//}
-	return false;
+		if (len1 < len2) return true;
+		if (len1 > len2) return false;
+		return n1 < n2;
+	}
+	else// deu am
+	{
+		if (len1 > len2)return true;
+		if (len1 < len2)return false;
+		return n1.compare(n2) > 0;
+	}
+	
 }
 
 
-//bool greater(string a, string b)
-//{
-//	return !less(a, b) && !equals(a, b);
-//}
-//
-//
-//
-//
-//
-//
-//
-//bool operator > (string a, string b)
-//{
-//	return greater(a, b);
-//}
-//bool operator < (string a, string b)
-//{
-//	return less(a, b);
-//}
+bool Greater(string a, string b)
+{
+	return !Less(a, b) && !equals(a, b);
+}
+
+
