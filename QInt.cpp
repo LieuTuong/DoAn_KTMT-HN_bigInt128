@@ -267,7 +267,7 @@ void PrintQInt(QInt number)
 }
 
 
-//=============================  CAC TOAN TU <, >, >=, <= , ==
+//=============================  CAC TOAN TU <, >, >=, <= , ==, =
 bool IsNegative(string num)
 {
 	return (num[0] == '1') ? true : false;
@@ -351,6 +351,8 @@ bool operator == (const QInt& N1, const QInt& N2)
 {
 	return IsEqual(N1, N2);
 }
+
+
 //==================================================================================
 
 
@@ -404,48 +406,63 @@ QInt operator ~ (const QInt& a)
 }
 
 
+string dichPhai(const string& a, int bit)
+{
+	string res;
+	if (bit > a.length()) return res;//neu dich so luong bit nhieu hon 128, thi toan bi mang se = 0
+	if (bit < 0)
+	{
+		cout << "\nSo luong bit dich khong hop le." << endl;
+		res = a;
+	}
+	else
+	{
+		char tmp = (IsNegative(a)) ? '1' : '0';
+		for (int i = a.length() - 1; i >= 119; i--)
+		{
+			char c = (i - bit) < 0 ? tmp : a[i - bit];
+			res.push_back(c);
+		}
+	}
+	
+	return res;
+}
+
+string dichTrai(const string& b, int bit)
+{
+	string res;
+	if (bit > b.length()) return res;
+	if (bit < 0)
+	{
+		cout << "\nSo luong bit dich khong hop le" << endl;
+		res = b;
+	}
+	else
+	{
+		for (int i = 0; i < b.length(); i++)
+		{
+			char c = (i + bit) > (b.length() - 1) ? 0 : b[i + bit];
+			res.push_back(c);
+		}
+	}
+	return res;
+}
 
 // Neu so luong bit dixh < 0 thi xu li nhu the nao, cho i kien???????
 QInt operator >> (const QInt& a, unsigned int bit)
 {
-	string res(MAX,'0');
+	string res;
 	string A = QInt_To_Arr(a);
-
-
-	if (bit >= MAX) //neu dich so luong bit nhieu hon 128, thi toan bi mang se = 0
-	{
-		A = { 0 };
-	}
-	else
-	{
-		char tmp = (IsNegative(A)) ? '1' : '0';
-		for (int i = MAX - 1; i >= 119; i--)
-		{
-			res[i] = (i - bit) < 0 ? tmp : A[i - bit];
-		}
-	}
+	res = dichPhai(A, bit);
 	return  Arr_To_QInt(res);
 }
-
-
 
 // thieu truong hop bit < 0
 QInt operator << (const QInt& a, int bit)
 {
-	string res(MAX,'0');
-	string A = QInt_To_Arr(a);
 
-	if (bit >= MAX) //neu dich so luong bit nhieu hon 128, thi toan bi mang se = 0
-	{
-		A = { 0 };
-	}
-	else
-	{
-		for (int i = 0; i < MAX; i++)
-		{
-			res[i] = (i + bit) > (MAX - 1) ? 0 : A[i + bit];
-		}
-	}
+	string A = QInt_To_Arr(a);
+	string res = dichTrai(A,bit);	
 	return  Arr_To_QInt(res);
 }
 
@@ -482,17 +499,161 @@ QInt ror(const QInt& a)
 //===================================================================================================
 
 
+//================================ TOAN TU + - * /
+string CongBit(const string& n1, const string& n2)
+{
+	string res(MAX, '0');
+	int tmp = 0;
+	for (int i = MAX - 1; i >= 0; i--)
+	{
+		tmp = stringToNum(n1[i]) + stringToNum(n2[i]) + tmp;
+		if (tmp == 2)
+		{			
+			tmp = 1;
+		}
+		else if (tmp > 2)
+		{
+			res[i] = '1';
+			tmp = 1;
+		}
+		else
+		{
+			tmp = 0;			
+		}
+	}
+	return res;
+}
 
+
+
+
+/*Phep tru 2 QInt a va b
+   a-b=a+(-b)
+   a + soBu2(b)*/
+string TruBit(const string& n1, const string& n2)
+{
+	string bu2_n2 = bu2(n2);
+	return  CongBit(n1, bu2_n2);	
+}
+
+QInt operator + (const QInt& n1, const QInt& n2)
+{
+	string res(MAX, '0');
+	string num1 = QInt_To_Arr(n1);
+	string num2 = QInt_To_Arr(n2);
+	res= CongBit(num1, num2);
+	return Arr_To_QInt(res);
+}
+
+
+
+QInt operator - (const QInt& n1, const QInt& n2)
+{
+	string res;
+	string num1 = QInt_To_Arr(n1);
+	string num2 = QInt_To_Arr(n2);
+	res=TruBit(num1, num2);
+	return Arr_To_QInt(res);
+}
+
+
+//QInt operator * (const QInt& m, const QInt& q)
+//{
+//	string A(MAX,'0');
+//	string M = QInt_To_Arr(m);
+//	string Q = QInt_To_Arr(q);
+//	string res;
+//	int Q0 = 0;
+//	int k = MAX;
+//	while (k>0)
+//	{
+//		if ( Q[MAX-1] == '1' && Q0 == 0)
+//		{
+//			A=TruBit(A,M);
+//			Q0 = 1;
+//		}
+//		else if (Q[MAX-1] == '0' && Q0 == 1)
+//		{
+//			A = CongBit(A,M);
+//			Q0 = 0;
+//		}
+//
+//		//Gop A va Q lai de dich bit
+//		string A_Q = A + Q;
+//		A_Q = dichPhai(A_Q, 1);//dich phai 1 bit
+//
+//		//Sau khi gop thi tach A_Q ra lai, nua dau la A, nua sau la Q
+//		A.assign(A_Q, 0, MAX);//tach tu 0 den vi tri MAX=128
+//		Q.assign(A_Q, MAX, MAX);//tu vi tri 128
+//		--k;
+//	}
+//	//res = A + Q;
+//	
+//	//Tinh neu ket qua bi tran
+//	return Arr_To_QInt(Q);
+//
+//}
+
+
+typedef struct
+{
+	uint32_t data[4];
+}QFloat;
+
+
+int SoPhanTuSauDauCham(string phanThapPhan)
+{
+	int dauCham = phanThapPhan.find_first_of('.');
+	return phanThapPhan.length() - dauCham - 1;
+}
+string Float_1(int n)
+{
+	string res = "1.";
+	for (int i = 0; i < n; i++)
+		res.push_back('0');
+	return res;
+}
+string DecToBin_phanThapPhan(string phanThapPhan)
+{
+	string res;
+	while (1)
+	{
+		phanThapPhan = phanThapPhan * 2;
+		int len_sauDauCham = SoPhanTuSauDauCham(phanThapPhan);
+		string so1 =Float_1(len_sauDauCham);
+
+		if (phanThapPhan == so1)
+		{
+			res.push_back('1');
+			break;
+		}
+		else if (phanThapPhan > so1)
+		{
+			res.push_back('1');
+			int DauCham = phanThapPhan.find_first_of('.');
+			for (int i = 0; i < DauCham; i++)
+				phanThapPhan[i] = '0';
+		}
+		else
+		{
+			res.push_back('0');
+		}
+	}
+	return res;
+}
+string DecToBin_QFloat(string bigFloat)
+{
+	return 0;
+}
 int main()
 {
 	string x = "2";
 	string y = "15";
 	QInt a, b;
-	ScanQInt(a, x);
-	ScanQInt(b, y);
-
-	QInt c = rol(b);
-	PrintQInt(c);
+	string h = "0.25";
+	
+	string res = DecToBin_phanThapPhan(h);
+	cout << res;
 
 	system("pause");
 	return 0;

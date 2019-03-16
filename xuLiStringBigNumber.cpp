@@ -85,6 +85,17 @@ string reverse(string a)
 	return rev_arr;
 }
 
+//string operator/(string a, string b)
+//{
+//	string res = divide(a, b).first;
+//	setSign(res, IsSign(a) != IsSign(b));
+//
+//	if (res == "0")
+//		setSign(res, false);
+//	return res;
+//
+//}
+
 string operator * (string bigNumber, int x)
 {
 	string res = "";
@@ -188,7 +199,7 @@ string subtract(string soTru, string soBiTru)
 	int hieu, tmp;
 	for (int i = len - 1; i >= 0; --i)
 	{
-
+		
 		if (soTru[i] < soBiTru[i]) //Neu tai vi tri dg xet, (soBiTru < soTru ), phan tu tiep theo -1 do muon 1
 		{
 			hieu = stringToNum(soTru[i]) + 10 - stringToNum(soBiTru[i]);
@@ -205,6 +216,27 @@ string subtract(string soTru, string soBiTru)
 		res.erase(0, 1);
 	return res;
 }
+
+//pair<string, string> divide(string n, string den)
+//{
+//	long long rem = 0;
+//	string res;
+//
+//	for (int i = 0, len = n.length(); i < len; ++i)
+//	{
+//		rem = (rem * 10) + stringToNum(n[i]);
+//		res.push_back(numToString(rem / den));
+//		rem %= den;
+//	}
+//
+//	res.resize(n.length());
+//
+//	while (res[0] == '0' && res.length() != 1)
+//		res.erase(0, 1);
+//	if (res.length() == 0)
+//		res = "0";
+//	return make_pair(res,rem);
+//}
 
 
 
