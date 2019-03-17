@@ -1,9 +1,13 @@
-﻿  QInt.cpp
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(83): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(168): warning C4018: '<': signed/unsigned mismatch
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(222): warning C4018: '<': signed/unsigned mismatch
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(422): warning C4018: '>': signed/unsigned mismatch
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(444): warning C4018: '>': signed/unsigned mismatch
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(452): warning C4018: '<': signed/unsigned mismatch
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(454): warning C4018: '>': signed/unsigned mismatch
+﻿  MAIN.cpp
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\main.cpp(83): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\main.cpp(168): warning C4018: '<': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\main.cpp(222): warning C4018: '<': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\main.cpp(422): warning C4018: '>': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\main.cpp(444): warning C4018: '>': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\main.cpp(452): warning C4018: '<': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\main.cpp(454): warning C4018: '>': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\main.cpp(725): warning C4018: '<': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\main.cpp(750): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\main.cpp(757): warning C4018: '<': signed/unsigned mismatch
+e:\lap trinh\bigint128 lan 2\bigint128 lan 2\main.cpp(759): warning C4018: '>': signed/unsigned mismatch
   BigInt128 lan 2.vcxproj -> E:\lap trinh\BigInt128 lan 2\Debug\BigInt128 lan 2.exe
