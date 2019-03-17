@@ -18,11 +18,18 @@ void initQInt(QInt& x)
 		x.data[i] = 0;
 }
 
+void them_du_n_bit(string& num, int n_bit=MAX)
+{
+	int len = num.length();
+	if (len < n_bit)
+		num.insert(0, n_bit-len, '0');
+}
 
 // Ham lay bu 1
 string bu1(string a)
 {
 	string tmp;
+	them_du_n_bit(a);
 	for (int i = 0; i < MAX; i++)
 	{
 		char x= (a[i] == '1') ? '0' : '1';
@@ -88,7 +95,8 @@ string QInt_To_Arr(const QInt& number)
 
 
 //Ham chuyen tu mang a sang Qint
-QInt Arr_To_QInt(const string& binArr)
+template<typename T>
+T Arr_To_QInt(const string& binArr)
 {
 	
 	string _128bit = binArr;
@@ -98,8 +106,8 @@ QInt Arr_To_QInt(const string& binArr)
 		_128bit.insert(0, 128 - n, '0');
 	}
 
-	QInt number;
-	initQInt(number);
+	T number;
+	
 	for (int i = 0; i < MAX; i++)
 	{
 		if (_128bit[i] == '1')
@@ -115,7 +123,8 @@ QInt Arr_To_QInt(const string& binArr)
 //he 10 -> he 2
 string DecToBin(string userInputStr)
 {
-	string binary(MAX,'0');
+	string binary;
+	char c;
 	
 	//Kiem tra xem userInputStr co phai la so am ko
 	bool IsSigned = IsSign(userInputStr);
@@ -129,10 +138,11 @@ string DecToBin(string userInputStr)
 	for ( int i = 0; userInputStr.length() != 0; i++)
 	{
 		if ((userInputStr[userInputStr.length() - 1] - 48) % 2 != 0) {
-			binary[i]='1';
+			c='1';
 			userInputStr[userInputStr.length() - 1] -= 1;
 		}
-		else binary[i]='0';
+		else c='0';
+		binary.push_back(c);
 		userInputStr = chia2(userInputStr);
 	}
 
@@ -244,7 +254,7 @@ void ScanQInt(QInt &number, string userInputStr)
 
 	string binArr = DecToBin(userInputStr);
 
-	number = Arr_To_QInt(binArr);
+	number = Arr_To_QInt<QInt>(binArr);
 
 	cout << endl;
 	for (int i = 0; i < 4; i++)
@@ -418,7 +428,7 @@ string dichPhai(const string& a, int bit)
 	else
 	{
 		char tmp = (IsNegative(a)) ? '1' : '0';
-		for (int i = a.length() - 1; i >= 119; i--)
+		for (int i = a.length() - 1; i >= 0; i--)
 		{
 			char c = (i - bit) < 0 ? tmp : a[i - bit];
 			res.push_back(c);
@@ -441,7 +451,7 @@ string dichTrai(const string& b, int bit)
 	{
 		for (int i = 0; i < b.length(); i++)
 		{
-			char c = (i + bit) > (b.length() - 1) ? 0 : b[i + bit];
+			char c = (i + bit) > (b.length() - 1) ? '0' : b[i + bit];
 			res.push_back(c);
 		}
 	}
@@ -454,7 +464,7 @@ QInt operator >> (const QInt& a, unsigned int bit)
 	string res;
 	string A = QInt_To_Arr(a);
 	res = dichPhai(A, bit);
-	return  Arr_To_QInt(res);
+	return  Arr_To_QInt<QInt>(res);
 }
 
 // thieu truong hop bit < 0
@@ -463,7 +473,7 @@ QInt operator << (const QInt& a, int bit)
 
 	string A = QInt_To_Arr(a);
 	string res = dichTrai(A,bit);	
-	return  Arr_To_QInt(res);
+	return  Arr_To_QInt<QInt>(res);
 }
 
 
@@ -478,7 +488,7 @@ QInt rol(const QInt& a)
 		A[i] = A[i + 1];
 	}
 	A[MAX - 1] = MSB;// bit trai nhat thanh bit phai nhat	
-	return  Arr_To_QInt(A);
+	return  Arr_To_QInt<QInt>(A);
 }
 
 
@@ -493,7 +503,7 @@ QInt ror(const QInt& a)
 		A[i] = A[i - 1];
 	}
 	A[0] = LSB;	
-	return Arr_To_QInt(A);
+	return Arr_To_QInt<QInt>(A);
 }
 
 //===================================================================================================
@@ -505,7 +515,7 @@ string CongBit(const string& n1, const string& n2)
 	string res;
 	char c;
 	int tmp = 0;
-	for (int i = MAX - 1; i >= 0; i--)
+	for (int i = n1.length() - 1; i >= 0; i--)
 	{
 		tmp = stringToNum(n1[i]) + stringToNum(n2[i]) + tmp;
 		if (tmp == 2)
@@ -548,7 +558,7 @@ QInt operator + (const QInt& n1, const QInt& n2)
 	string num1 = QInt_To_Arr(n1);
 	string num2 = QInt_To_Arr(n2);
 	res= CongBit(num1, num2);
-	return Arr_To_QInt(res);
+	return Arr_To_QInt<QInt>(res);
 }
 
 
@@ -559,7 +569,7 @@ QInt operator - (const QInt& n1, const QInt& n2)
 	string num1 = QInt_To_Arr(n1);
 	string num2 = QInt_To_Arr(n2);
 	res=TruBit(num1, num2);
-	return Arr_To_QInt(res);
+	return Arr_To_QInt<QInt>(res);
 }
 
 
@@ -652,22 +662,96 @@ string DecToBin_phanThapPhan(string phanThapPhan)
 	}
 	return res;
 }
+
+
+//Tach phan nguyen va phan thap phan cua QFloat
+void tachQFloat(string bigFloat, string& phanNguyen, string& phanThapPhan)
+{
+	int len = bigFloat.length();
+	int dauCham = bigFloat.find_first_of('.');
+
+	phanNguyen.assign(bigFloat, 0, dauCham);
+
+	phanThapPhan.assign(bigFloat, dauCham, len - phanNguyen.length());//dg co dang (.x)
+	phanThapPhan.insert(0, 1, '0');//dua ve dang (0.x)
+}
+
+
 string DecToBin_QFloat(string bigFloat)
 {
-	string res;
-	int dauCham = bigFloat.find_first_of('.');
-	string phanNguyen;
-	return 0;
+	string res, phanNguyen, phanThapPhan;
+	tachQFloat(bigFloat, phanNguyen, phanThapPhan);
+
+	res = DecToBin(phanNguyen);
+	res.append(".");
+	res.append(DecToBin_phanThapPhan(phanThapPhan));
+
+	return res;	
 }
+
+//Chuan hoa ve dang ( 1.F * 2^E )
+int chuanHoaQFloat(string& floatNum)
+{
+	int exponent;
+	int dauCham = floatNum.find_first_of('.');
+	int so1DauTien = floatNum.find_first_of('1');
+
+	int viTri = (dauCham > so1DauTien) ? so1DauTien + 1 : so1DauTien;
+	floatNum.erase(dauCham, 1);
+	floatNum.insert(viTri, 1, '.');
+	exponent = (dauCham > so1DauTien) ? dauCham - so1DauTien - 1 : dauCham - so1DauTien;
+	return exponent;
+}
+
+void ScanQFloat(QFloat& x,string num)
+{
+	string res;
+	char c;
+	
+	string binFloat = DecToBin_QFloat(num);
+	int E = chuanHoaQFloat(binFloat);//Chuan hoa ve dang ( 1.F * 2^E ), tra ve E
+	E += 16383;// E+ bias
+	string expBin = DecToBin(toString(E));//chuyen so mu sang nhi phan
+
+	binFloat.erase(0, 2);// bo 1.
+
+	if (binFloat.length() < 112)//them so 0 cho du 112 fration
+	{
+		binFloat.insert(binFloat.length(), 112 - binFloat.length(), '0');
+	}
+
+	//Bieu dien bit dau
+	c = IsSign(num) ? '1' : '0';
+	res.push_back(c);
+	cout << "\nDau" << endl;
+	cout << res;
+	// Bieu dien 15 bit exp
+	res.append(expBin);
+	cout << "\nPhan exp: " << endl;
+	cout << res;
+	//Bieu dien 112 fraction
+	res.append(binFloat);
+	cout << "\nChuoi nhi phan float"<<endl;
+	cout << res;
+
+	QFloat Qfloat = Arr_To_QInt<QFloat>(res);
+
+	cout << endl;
+	for (int i = 0; i < 4; i++)
+	{
+		cout << bitset<32>(Qfloat.data[i]);
+	}
+}
+
 int main()
 {
-	string a = "-10";
-	string b = "12";
-	QInt x, y;
-	ScanQInt(x, a);
-	ScanQInt(y, b);
-	QInt res = x + y;
-	PrintQInt(res);
+	/*string x = "8.21875";
+	string res=DecToBin_QFloat(x);
+	cout << res<<endl;*/
+	string x = "8.21875";
+	QFloat a;
+	ScanQFloat(a, x);
+	
 	system("pause");
 	return 0;
 }

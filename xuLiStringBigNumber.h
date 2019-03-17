@@ -3,10 +3,12 @@
 #define __XULISTRINGBIGNUMBER_H__
 #include<iostream>
 #include<string>
+#include<sstream>
 using namespace std;
 
 int stringToNum(char c);
 char numToString(int n);
+string toString(long long n);
 bool IsSign(string num);
 void setSign(string& num, bool s);
 string absolute(string num);

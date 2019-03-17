@@ -10,6 +10,17 @@ char numToString(int n)     // chuyen so sang char
 	return (char)(n + 48);
 }
 
+string toString(long long n)
+{
+	stringstream ss;
+	string tmp;
+
+	ss << n;
+	ss >> tmp;
+	return tmp;
+
+}
+
 //Kiem tra dau cua num
 bool IsSign(string num)
 {
