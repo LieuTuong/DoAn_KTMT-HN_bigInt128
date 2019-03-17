@@ -6,6 +6,4 @@ e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(412): warning C4018: '>': 
 e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(434): warning C4018: '>': signed/unsigned mismatch
 e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(442): warning C4018: '<': signed/unsigned mismatch
 e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(444): warning C4018: '>': signed/unsigned mismatch
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(652): warning C4101: 'a': unreferenced local variable
-e:\lap trinh\bigint128 lan 2\bigint128 lan 2\qint.cpp(652): warning C4101: 'b': unreferenced local variable
   BigInt128 lan 2.vcxproj -> E:\lap trinh\BigInt128 lan 2\Debug\BigInt128 lan 2.exe

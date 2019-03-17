@@ -502,25 +502,31 @@ QInt ror(const QInt& a)
 //================================ TOAN TU + - * /
 string CongBit(const string& n1, const string& n2)
 {
-	string res(MAX, '0');
+	string res;
+	char c;
 	int tmp = 0;
 	for (int i = MAX - 1; i >= 0; i--)
 	{
 		tmp = stringToNum(n1[i]) + stringToNum(n2[i]) + tmp;
 		if (tmp == 2)
-		{			
+		{	
+			c = '0';
 			tmp = 1;
 		}
 		else if (tmp > 2)
 		{
-			res[i] = '1';
+			c = '1';
 			tmp = 1;
 		}
 		else
 		{
+			c = numToString(tmp);
 			tmp = 0;			
 		}
+		res.insert(0, 1, c);
 	}
+	if (tmp == 1)
+		res.insert(0, 1, '1');
 	return res;
 }
 
@@ -606,6 +612,8 @@ int SoPhanTuSauDauCham(string phanThapPhan)
 	int dauCham = phanThapPhan.find_first_of('.');
 	return phanThapPhan.length() - dauCham - 1;
 }
+
+//Tao so thuc 1 vs n so 0 ngoai sau
 string Float_1(int n)
 {
 	string res = "1.";
@@ -613,6 +621,9 @@ string Float_1(int n)
 		res.push_back('0');
 	return res;
 }
+
+
+//chuyen phan thap phan cua QFloat tu Dec -> Bin
 string DecToBin_phanThapPhan(string phanThapPhan)
 {
 	string res;
@@ -622,12 +633,12 @@ string DecToBin_phanThapPhan(string phanThapPhan)
 		int len_sauDauCham = SoPhanTuSauDauCham(phanThapPhan);
 		string so1 =Float_1(len_sauDauCham);
 
-		if (phanThapPhan == so1)
+		if (phanThapPhan.compare(so1)==0)
 		{
 			res.push_back('1');
 			break;
 		}
-		else if (phanThapPhan > so1)
+		else if (phanThapPhan.compare(so1)==1)
 		{
 			res.push_back('1');
 			int DauCham = phanThapPhan.find_first_of('.');
@@ -643,18 +654,20 @@ string DecToBin_phanThapPhan(string phanThapPhan)
 }
 string DecToBin_QFloat(string bigFloat)
 {
+	string res;
+	int dauCham = bigFloat.find_first_of('.');
+	string phanNguyen;
 	return 0;
 }
 int main()
 {
-	string x = "2";
-	string y = "15";
-	QInt a, b;
-	string h = "0.25";
-	
-	string res = DecToBin_phanThapPhan(h);
-	cout << res;
-
+	string a = "-10";
+	string b = "12";
+	QInt x, y;
+	ScanQInt(x, a);
+	ScanQInt(y, b);
+	QInt res = x + y;
+	PrintQInt(res);
 	system("pause");
 	return 0;
 }
